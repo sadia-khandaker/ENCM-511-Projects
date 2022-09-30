@@ -15,6 +15,16 @@
 #include <math.h>
 #include <errno.h>
 
+// PRE-PROCESSOR DIRECTIVES
+#pragma config FCKSM = CSECMD // Clock switching is enabled, clock monitor disabled
+
+// MACROS
+#define Nop() {__asm__ volatile ("nop");}
+#define ClrWdt() {__asm__ volatile ("clrwdt");}
+#define Sleep() {__asm__ volatile ("pwrsav #0");}   // set sleep mode
+#define Idle() {__asm__ volatile ("pwrsav #1");}
+#define dsen() {__asm__ volatile ("BSET DSCON, #15");}
+
 /*
 Using the PIC 24F, you will design a simple IO controller to test out the hardware kit provided.
 Design a state machine to turn on, turn off and blink a LED connected to port RB8 based on the push buttons
