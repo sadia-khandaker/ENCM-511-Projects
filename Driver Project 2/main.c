@@ -109,6 +109,9 @@ void set_clock_frequency(unsigned int clkval) { // Set clock frequency to clkval
 //    }
 //}
 
+void toggleLED(void) { // Toggle LED
+    LATBbits.LATB8 = ~LATBbits.LATB8; // Toggle LED, so if LED is on, turn it off, and vice versa
+}
 
 int main(void) {
     initIO(); // Initialize IO ports
