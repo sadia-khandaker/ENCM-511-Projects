@@ -8,7 +8,6 @@
  * Created on September 29, 2022, 6:32 PM
  */
 
-
 #include "xc.h"
 #include <p24fxxxx.h>
 #include <p24F16KA101.h>
@@ -32,19 +31,77 @@ While 2 or more PBs are pressed together      |     LED stays on without blinkin
 ------------------------------------------------------------------------------------------------------------------------
  */
 
-int main(void) {
 
-    AD1PCFG = 0xFFFF;  // Turn all analog pins to digital
-
+void initIO(void) { // Initialize IO ports
+    AD1PCFG = 0xFFFF; // Set all analog pins to digital
     TRISBbits.TRISB8 = 0; // Set GPIO RB8 as digital output, which is connected to LED
-
     TRISAbits.TRISA2 = 1; // Set GPIO RA2 as digital input, which is connected to PB1
     TRISAbits.TRISA4 = 1; // Set GPIO RA4 as digital input, which is connected to PB2
     TRISBbits.TRISB4 = 1; // Set GPIO RB4 as digital input, which is connected to PB3
-
     CNPU1bits.CN0PUE = 1; // Enable pull-up resistor for RA4/CN0
     CNPU2bits.CN30PUE = 1; // Enable pull-up resistor for RA2/CN30
     CNPU1bits.CN1PUE = 1; // Enable pull-up resistor for RB4/CN1
+    CNEN1bits.CN0IE = 1; // Enable CN0 interrupt for port RA4 (PB2)
+    CNEN2bits.CN30IE = 1; // Enable CN30 interrupt for port RA2 (PB1)
+    CNEN1bits.CN1IE = 1; // Enable CN1 interrupt for port RB4 (PB3)
+    IFS1bits.CNIF = 0; // Clear CN interrupt flag bit
+    IEC1bits.CNIE = 1; // Enable CN interrupt enable bit
+    IPC4bits.CNIP = 7; // Set CN interrupt priority to 7 (highest priority)
+}
+
+//clkval = 8 for 8MHz;
+//clkval = 500 for 500kHz;
+//clkval = 32 for 32kHz;
+void set_clock_frequency(unsigned int clkval) { // Set clock frequency to clkval
+    char COSCNOSC;
+    if (clkval == 8)  //8MHz
+    {
+        COSCNOSC = 0x00;
+    } else if (clkval == 500) // 500 kHz
+    {
+        COSCNOSC = 0x66;
+    } else if (clkval == 32) //32 kHz
+    {
+        COSCNOSC = 0x55;
+    } else // default 32 kHz
+    {
+        COSCNOSC = 0x55;
+    }
+    // Switch clock to 500 kHz
+    SRbits.IPL = 7;  //Disable interrupts
+    CLKDIVbits.RCDIV = 0;  // CLK division = 0
+    __builtin_write_OSCCONH(COSCNOSC);   // (0x00) for 8MHz; (0x66) for 500kHz; (0x55) for 32kHz;
+    __builtin_write_OSCCONL(0x01);
+    OSCCONbits.OSWEN = 1;
+    while (OSCCONbits.OSWEN == 1) {}
+    SRbits.IPL = 0;  //enable interrupts
+}
+// TODO: Add interrupt service routine for CN interrupt without using timer functions.
+//void __attribute__((interrupt, no_auto_psv)) _CNInterrupt(void) { // Interrupt service routine for CN interrupt, this function calls the timer functions
+//    IFS1bits.CNIF = 0; // Clear CN interrupt flag bit
+//    if (PORTAbits.RA2 == 0) { // If PB1 is pressed
+//        LATBbits.LATB8 = 1; // Turn on LED
+//        __delay_ms(1000); // Delay for 1 second
+//        LATBbits.LATB8 = 0; // Turn off LED
+//        __delay_ms(1000); // Delay for 1 second
+//    } else if (PORTAbits.RA4 == 0) { // If PB2 is pressed
+//        LATBbits.LATB8 = 1; // Turn on LED
+//        __delay_ms(2000); // Delay for 2 seconds
+//        LATBbits.LATB8 = 0; // Turn off LED
+//        __delay_ms(2000); // Delay for 2 seconds
+//    } else if (PORTBbits.RB4 == 0) { // If PB3 is pressed
+//        LATBbits.LATB8 = 1; // Turn on LED
+//        __delay_ms(3000); // Delay for 3 seconds
+//        LATBbits.LATB8 = 0; // Turn off LED
+//        __delay_ms(3000); // Delay for 3 seconds
+//    } else { // If 2 or more PBs are pressed together
+//        LATBbits.LATB8 = 1; // Turn on LED
+//    }
+//}
+
+
+int main(void) {
+    initIO(); // Initialize IO ports
 
     return 0;
 }
