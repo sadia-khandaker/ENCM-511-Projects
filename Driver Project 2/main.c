@@ -8,17 +8,61 @@
  * Created on September 29, 2022, 6:32 PM
  */
 
+//// HEADER FILES ////
 #include "xc.h"
 #include <p24fxxxx.h>
 #include <p24F16KA101.h>
 #include <stdio.h>
 #include <math.h>
 #include <errno.h>
+#include <libpic30.h>
+#include <stdlib.h>
 
-// PRE-PROCESSOR DIRECTIVES
+
+//// CONFIGURATION BITS - PRE-PROCESSOR DIRECTIVES ////
+
+// Code protection
+#pragma config BSS = OFF // Boot segment code protect disabled
+#pragma config BWRP = OFF // Boot sengment flash write protection off
+#pragma config GCP = OFF // general segment code protecion off
+#pragma config GWRP = OFF
+
+// CLOCK CONTROL
+#pragma config IESO = OFF    // 2 Speed Startup disabled
+#pragma config FNOSC = FRC  // Start up CLK = 8 MHz
 #pragma config FCKSM = CSECMD // Clock switching is enabled, clock monitor disabled
+#pragma config SOSCSEL = SOSCLP // Secondary oscillator for Low Power Operation
+#pragma config POSCFREQ = MS  //Primary Oscillator/External clk freq betwn 100kHz and 8 MHz. Options: LS, MS, HS
+#pragma config OSCIOFNC = ON  //CLKO output disabled on pin 8, use as IO.
+#pragma config POSCMOD = NONE  // Primary oscillator mode is disabled
 
-// MACROS
+// WDT
+#pragma config FWDTEN = OFF // WDT is off
+#pragma config WINDIS = OFF // STANDARD WDT/. Applicable if WDT is on
+#pragma config FWPSA = PR32 // WDT is selected uses prescaler of 32
+#pragma config WDTPS = PS1 // WDT postscler is 1 if WDT selected
+
+//MCLR/RA5 CONTROL
+#pragma config MCLRE = OFF // RA5 pin configured as input, MCLR reset on RA5 diabled
+
+//BOR  - FPOR Register
+#pragma config BORV = LPBOR // LPBOR value=2V is BOR enabled
+#pragma config BOREN = BOR0 // BOR controlled using SBOREN bit
+#pragma config PWRTEN = OFF // Powerup timer disabled
+#pragma config I2C1SEL = PRI // Default location for SCL1/SDA1 pin
+
+//JTAG FICD Register
+#pragma config BKBUG = OFF // Background Debugger functions disabled
+#pragma config ICS = PGx2 // PGC2 (pin2) & PGD2 (pin3) are used to connect PICKIT3 debugger
+
+// Deep Sleep RTCC WDT
+#pragma config DSWDTEN = OFF // Deep Sleep WDT is disabled
+#pragma config DSBOREN = OFF // Deep Sleep BOR is disabled
+#pragma config RTCOSC = LPRC// RTCC uses LPRC 32kHz for clock
+#pragma config DSWDTOSC = LPRC // DeepSleep WDT uses Lo Power RC clk
+#pragma config DSWDTPS = DSWDTPS7 // DSWDT postscaler set to 32768
+
+//// MACROS ////
 #define Nop() {__asm__ volatile ("nop");}
 #define ClrWdt() {__asm__ volatile ("clrwdt");}
 #define Sleep() {__asm__ volatile ("pwrsav #0");}   // set sleep mode
@@ -31,7 +75,6 @@ Design a state machine to turn on, turn off and blink a LED connected to port RB
 (PBs) connected to the input ports RA2, RA4 and RB4 as shown in the schematic in the lecture slide ?HW
 and IO Control.pdf?. PB1, PB2 and PB3 represent push buttons connected to ports RA2, RA4 and RB4
 respectively. The state machine should operate as follows:
-
 User input(s)                                 |     Output(s)
 ------------------------------------------------------------------------------------------------------------------------
 While PB1 is pressed                          |     LED blinks at approximately 1 sec interval (1 sec on and 1 sec off)
@@ -57,6 +100,7 @@ void initIO(void) { // Initialize IO ports
     IFS1bits.CNIF = 0; // Clear CN interrupt flag bit
     IEC1bits.CNIE = 1; // Enable CN interrupt enable bit
     IPC4bits.CNIP = 7; // Set CN interrupt priority to 7 (highest priority)
+
 }
 
 //clkval = 8 for 8MHz;
@@ -86,35 +130,68 @@ void set_clock_frequency(unsigned int clkval) { // Set clock frequency to clkval
     while (OSCCONbits.OSWEN == 1) {}
     SRbits.IPL = 0;  //enable interrupts
 }
-// TODO: Add interrupt service routine for CN interrupt without using timer functions.
-//void __attribute__((interrupt, no_auto_psv)) _CNInterrupt(void) { // Interrupt service routine for CN interrupt, this function calls the timer functions
-//    IFS1bits.CNIF = 0; // Clear CN interrupt flag bit
-//    if (PORTAbits.RA2 == 0) { // If PB1 is pressed
-//        LATBbits.LATB8 = 1; // Turn on LED
-//        __delay_ms(1000); // Delay for 1 second
-//        LATBbits.LATB8 = 0; // Turn off LED
-//        __delay_ms(1000); // Delay for 1 second
-//    } else if (PORTAbits.RA4 == 0) { // If PB2 is pressed
-//        LATBbits.LATB8 = 1; // Turn on LED
-//        __delay_ms(2000); // Delay for 2 seconds
-//        LATBbits.LATB8 = 0; // Turn off LED
-//        __delay_ms(2000); // Delay for 2 seconds
-//    } else if (PORTBbits.RB4 == 0) { // If PB3 is pressed
-//        LATBbits.LATB8 = 1; // Turn on LED
-//        __delay_ms(3000); // Delay for 3 seconds
-//        LATBbits.LATB8 = 0; // Turn off LED
-//        __delay_ms(3000); // Delay for 3 seconds
-//    } else { // If 2 or more PBs are pressed together
-//        LATBbits.LATB8 = 1; // Turn on LED
-//    }
-//}
 
-void toggleLED(void) { // Toggle LED
-    LATBbits.LATB8 = ~LATBbits.LATB8; // Toggle LED, so if LED is on, turn it off, and vice versa
+
+void delay_ms(unsigned int ms) {
+    // The default clock frequency is 8MHz. The
+    //program counter increments from one instruction to the next at every other clock cycle (i.e. 4
+    //MHz). The number of clock cycles needed per instruction varies between 2 and 20 for different
+    //types of instructions with the free C compiler use
+    T2CONbits.TON = 0; // Disable Timer2
+    T2CONbits.TCS = 0; // Select internal instruction cycle clock
+    T2CONbits.TGATE = 0; // Disable Gated Timer mode
+    T2CONbits.TCKPS = 0b00; // Select 1:1 Prescaler
+    TMR2 = 0x00; // Clear timer register
+    PR2 = 2000; // Load the period value
+    IFS0bits.T2IF = 0; // Clear Timer2 interrupt status flag
+    T2CONbits.TON = 1; // Start Timer
+    while (ms > 0) {
+        while (IFS0bits.T2IF == 0); // Wait for Timer2 to overflow
+        IFS0bits.T2IF = 0; // Clear Timer2 interrupt status flag
+        ms--;
+    }
+    T2CONbits.TON = 0; // Stop Timer
+    Idle();
+}
+
+void checkIO(){
+    if (PORTAbits.RA2 == 0 && PORTAbits.RA4 == 1 && PORTBbits.RB4 == 1) { // PB1 is pressed
+        LATBbits.LATB8 = 1; // Turn on LED
+        delay_ms(1000); // Wait 1 sec
+        LATBbits.LATB8 = 0; // Turn off LED
+        delay_ms(1000); // Wait 1 sec
+    } else if (PORTAbits.RA2 == 1 && PORTAbits.RA4 == 0 && PORTBbits.RB4 == 1) { // PB2 is pressed
+        LATBbits.LATB8 = 1; // Turn on LED
+        delay_ms(2000); // Wait 2 sec
+        LATBbits.LATB8 = 0; // Turn off LED
+        delay_ms(2000); // Wait 2 sec
+    } else if (PORTAbits.RA2 == 1 && PORTAbits.RA4 == 1 && PORTBbits.RB4 == 0) { // PB3 is pressed
+        LATBbits.LATB8 = 1; // Turn on LED
+        delay_ms(3000); // Wait 3 sec
+        LATBbits.LATB8 = 0; // Turn off LED
+        delay_ms(3000); // Wait 3 sec
+    } else if (PORTAbits.RA2 == 0 && PORTAbits.RA4 == 0 && PORTBbits.RB4 == 1) { // PB1 and PB2 are pressed
+        LATBbits.LATB8 = 1; // Turn on LED
+    } else if (PORTAbits.RA2 == 0 && PORTAbits.RA4 == 1 && PORTBbits.RB4 == 0) { // PB1 and PB3 are pressed
+        LATBbits.LATB8 = 1; // Turn on LED
+    } else if (PORTAbits.RA2 == 1 && PORTAbits.RA4 == 0 && PORTBbits.RB4 == 0) { // PB2 and PB3 are pressed
+        LATBbits.LATB8 = 1; // Turn on LED
+    } else
+        LATBbits.LATB8 = 0; // Turn off LED
+        Idle(); // Puts the processor in idle mode
+}
+
+
+void __attribute__((interrupt, no_auto_psv)) CNInterrupt(void) {
+    IFS1bits.CNIF = 0; // Clear interrupt flag
+    checkIO();
 }
 
 int main(void) {
-    initIO(); // Initialize IO ports
-
+    set_clock_frequency(8);
+    initIO();
+    while(1) {
+        checkIO();
+    }
     return 0;
 }
