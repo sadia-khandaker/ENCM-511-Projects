@@ -5,6 +5,10 @@
  * Created on October 5, 2022, 1:36 PM
  */
 
+// Function Prototype
+void IOinit(void);
+void IOcheck(void);
+
 #include "xc.h"
 #include <p24fxxxx.h>
 #include <p24F16KA101.h>
