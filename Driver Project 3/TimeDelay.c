@@ -32,15 +32,36 @@
 
 // }
 
+// void delay_ms(unsigned int time_ms){
+
+
+//     T2CONbits.TON = 0; // Disable Timer
+//     T2CONbits.TCS = 0; // Select internal instruction cycle clock
+//     T2CONbits.TGATE = 0; // Disable Gated Timer mode
+//     T2CONbits.TCKPS = 0b11; // Select 1:256 Prescaler
+//     TMR2 = 0x00; // Clear timer register
+//     PR2 = 0x9C3F; // Load the period value
+//     IFS0bits.T2IF = 0; // Clear Timer2 Interrupt Flag
+//     T2CONbits.TON = 1; // Start Timer
+//     while (IFS0bits.T2IF == 0) { ; } // Wait for Timer2 to roll over
+
+//     Idle(); //Puts the processor in idle mode while timer goes down
+
+// }
+
+// void __attribute__((interrupt, no_auto_psv)) _T2Interrupt(void) {
+//     IFS0bits.T2IF = 0; // Clear Timer2 Interrupt Flag
+//     T2CONbits.TON = 0; // Stop Timer
+// }
+
 void delay_ms(unsigned int time_ms){
-
-
+    
     T2CONbits.TON = 0; // Disable Timer
     T2CONbits.TCS = 0; // Select internal instruction cycle clock
     T2CONbits.TGATE = 0; // Disable Gated Timer mode
     T2CONbits.TCKPS = 0b11; // Select 1:256 Prescaler
     TMR2 = 0x00; // Clear timer register
-    PR2 = 0x9C3F; // Load the period value
+    PR2 = 0xFFFF;
     IFS0bits.T2IF = 0; // Clear Timer2 Interrupt Flag
     T2CONbits.TON = 1; // Start Timer
     while (IFS0bits.T2IF == 0) { ; } // Wait for Timer2 to roll over
@@ -53,6 +74,7 @@ void __attribute__((interrupt, no_auto_psv)) _T2Interrupt(void) {
     IFS0bits.T2IF = 0; // Clear Timer2 Interrupt Flag
     T2CONbits.TON = 0; // Stop Timer
 }
+
 
 
 
