@@ -75,13 +75,6 @@
 //     T2CONbits.TON = 0; // Stop Timer
 // }
 
-#include "TimeDelay.h"
-#include "xc.h"
-#include <p24fxxxx.h>
-#include <p24F16KA101.h>
-#include <stdio.h>
-#include <math.h>
-#include <errno.h>
 
 // delay_ms(time_ms) – implements the delay functions used to time the LED blinks. time_ms is the user
 ////specified time delay in milliseconds. Your function is only expected to handle delays of whole numbers
