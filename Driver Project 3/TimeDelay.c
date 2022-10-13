@@ -14,24 +14,45 @@
 ////specified time delay in milliseconds. Your function is only expected to handle delays of whole numbers
 ////(e.g. 1 ms, 5 ms, 2504 ms) and not floating point numbers (e.g. 1.2 ms, 5.5 ms, 2504.8ms) .
 
-// create your own __delay_ms() function using only timers and interrupts
-void delay_ms(unsigned int time_ms){
-    T1CONbits.TON = 0; // Stop timer
-    T1CONbits.TCS = 0; // Select internal instruction cycle clock
-    T1CONbits.TCKPS = 0b00; // Select 1:1 Prescaler
-    TMR1 = 0x00; // Clear timer register
-    PR1 = 0x9C3F; // Load the period value
-    T1CONbits.TON = 1; // Start timer
-    while(time_ms != 0){
-        while(IFS0bits.T1IF == 0); // Wait for Timer1 to overflow
-        IFS0bits.T1IF = 0; // Clear Timer1 interrupt flag
-        time_ms--;
-    }
-    T1CONbits.TON = 0; // Stop timer
+// Version 1 
+// void delay_ms(unsigned int time_ms){
+//     T1CONbits.TON = 0; // Stop timer
+//     T1CONbits.TCS = 0; // Select internal instruction cycle clock
+//     T1CONbits.TCKPS = 0b00; // Select 1:1 Prescaler
+//     TMR1 = 0x00; // Clear timer register
+//     PR1 = 0x9C3F; // Load the period value
+//     T1CONbits.TON = 1; // Start timer
+//     while(time_ms != 0){
+//         while(IFS0bits.T1IF == 0); // Wait for Timer1 to overflow
+//         IFS0bits.T1IF = 0; // Clear Timer1 interrupt flag
+//         time_ms--;
+//     }
+//     T1CONbits.TON = 0; // Stop timer
 
+
+// }
+
+void delay_ms(unsigned int time_ms){
+
+
+    T2CONbits.TON = 0; // Disable Timer
+    T2CONbits.TCS = 0; // Select internal instruction cycle clock
+    T2CONbits.TGATE = 0; // Disable Gated Timer mode
+    T2CONbits.TCKPS = 0b11; // Select 1:256 Prescaler
+    TMR2 = 0x00; // Clear timer register
+    PR2 = 0x9C3F; // Load the period value
+    IFS0bits.T2IF = 0; // Clear Timer2 Interrupt Flag
+    T2CONbits.TON = 1; // Start Timer
+    while (IFS0bits.T2IF == 0) { ; } // Wait for Timer2 to roll over
+
+    Idle(); //Puts the processor in idle mode while timer goes down
 
 }
 
+void __attribute__((interrupt, no_auto_psv)) _T2Interrupt(void) {
+    IFS0bits.T2IF = 0; // Clear Timer2 Interrupt Flag
+    T2CONbits.TON = 0; // Stop Timer
+}
 
 
 
