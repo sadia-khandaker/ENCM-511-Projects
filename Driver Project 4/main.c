@@ -1,8 +1,5 @@
 /*
  * File:   main.c
- * Author: Rushi V
- *
- * Created on September 26, 2020, 9:17 PM
  *
  * Driver Project 4: IO Interrupts, Timers and UART Display Drivers
  * Using the Microcontroller and the driver topics on IOs, Timers,
@@ -129,66 +126,75 @@
 uint8_t CNflag = 0;
 uint16_t i = 0;
 
-
-//MAIN
 void main(void) {
-    //Clock output on REFO/RB15 - Testing purposes only
-     TRISBbits.TRISB15 = 0;  // Set RB15 as output for REFO
-     REFOCONbits.ROEN = 1; // Ref oscillator is enabled
-     REFOCONbits.ROSSLP = 0; // Ref oscillator is disabled in sleep
-     REFOCONbits.ROSEL = 0; // Output base clk showing clock switching
-     REFOCONbits.RODIV = 0b0000;
-     
-    // Change Clock of MCU - Adjust UART Baud rate on PC accordingly
-     NewClk(8); // 8 for 8 MHz; 500 for 500 kHz; 32 for 32 kHz
-     
-   // Initialize IOs for low-power wake-up
-    AD1PCFG = 0xFFFF; // Turn all analog pins as digital
-    IOinit();         // enables IO and CN interrupts on Push buttons
-    InitUART2();      //Initialize UART settings and enable UART module
-    
-    while(1)
-    {
-        
-        /*-- Display Commands --*/      
-        XmitUART2('G', 5);    // Xmits char 'G' 5 times via UART2 
-        XmitUART2('\n',1);    // Xmits New line ASCII command via UART2    
-        XmitUART2('\r',1);    // Xmits Carriage Return ASCII command via UART2
-        
-        Disp2String("\r Hello U of C - Today is day ");
-        Disp2Dec(i);
-        Disp2Hex(i);
-        i=i+1;
-        XmitUART2('\n',1);    // Xmits New line ASCII command via UART2    
-        XmitUART2('\r',1);    // Xmits Carriage Return ASCII command via UART2
-        
-        Disp2String("\r PORTA is: ");   
-        Disp2Hex(PORTA);        //Xmits PORTA values via UART in 16bit Hex form
-        XmitUART2('\n',1);    // Xmits New line ASCII command via UART2    
-        XmitUART2('\r',1);    // Xmits Carriage Return ASCII command via UART2
-        
-        double f;
-        char str[10];
-        f= -15.5678;
-        sprintf(str, "%1.5f", f); // translates -15.5678 into array of char called str[]]
-        Disp2String(str);         //Display str[]
-        XmitUART2('\n',1);        // Xmits New line ASCII command via UART2
-        XmitUART2('\r',1);        // Xmits Carriage Return ASCII command via UART2
-        
-        
-//        signed int d;
-//        char str[10];
-//        d =-58;                       
-//        sprintf(str, "%1.0d", d);     // translates -15.5678 into array of char called str[]    
-//        Disp2String(str);             //Display str[]
-//        XmitUART2('\n',1);            // Xmits New line ASCII command via UART2
-//        XmitUART2('\r',1);            // Xmits Carriage Return ASCII command via UART2
-        
-        
-        LATBbits.LATB8 = 1;             //Turn on LED
-//        Idle();                       // Put MCU in idle mode - OPTIONAL
-        
+    IOinit(); // Initialize IOs for low-power wake-up
+    InitUART2(); // Initialize UART settings and enable UART module
+    while (1) {
+        IOcheck(); // Check if any IOs are active
+        Idle(); // Put MCU in idle mode
     }
-    
-    return;
 }
+
+
+//// SAMPLE MAIN
+//void main(void) {
+//    //Clock output on REFO/RB15 - Testing purposes only
+//     TRISBbits.TRISB15 = 0;  // Set RB15 as output for REFO
+//     REFOCONbits.ROEN = 1; // Ref oscillator is enabled
+//     REFOCONbits.ROSSLP = 0; // Ref oscillator is disabled in sleep
+//     REFOCONbits.ROSEL = 0; // Output base clk showing clock switching
+//     REFOCONbits.RODIV = 0b0000;
+//     
+//    // Change Clock of MCU - Adjust UART Baud rate on PC accordingly
+//     NewClk(8); // 8 for 8 MHz; 500 for 500 kHz; 32 for 32 kHz
+//     
+//   // Initialize IOs for low-power wake-up
+//    AD1PCFG = 0xFFFF; // Turn all analog pins as digital
+//    IOinit();         // enables IO and CN interrupts on Push buttons
+//    InitUART2();      //Initialize UART settings and enable UART module
+//    
+//    while(1)
+//    {
+//        
+//        /*-- Display Commands --*/      
+//        XmitUART2('G', 5);    // Xmits char 'G' 5 times via UART2 
+//        XmitUART2('\n',1);    // Xmits New line ASCII command via UART2    
+//        XmitUART2('\r',1);    // Xmits Carriage Return ASCII command via UART2
+//        
+//        Disp2String("\r Hello U of C - Today is day ");
+//        Disp2Dec(i);
+//        Disp2Hex(i);
+//        i=i+1;
+//        XmitUART2('\n',1);    // Xmits New line ASCII command via UART2    
+//        XmitUART2('\r',1);    // Xmits Carriage Return ASCII command via UART2
+//        
+//        Disp2String("\r PORTA is: ");   
+//        Disp2Hex(PORTA);        //Xmits PORTA values via UART in 16bit Hex form
+//        XmitUART2('\n',1);    // Xmits New line ASCII command via UART2    
+//        XmitUART2('\r',1);    // Xmits Carriage Return ASCII command via UART2
+//        
+//        double f;
+//        char str[10];
+//        f= -15.5678;
+//        sprintf(str, "%1.5f", f); // translates -15.5678 into array of char called str[]]
+//        Disp2String(str);         //Display str[]
+//        XmitUART2('\n',1);        // Xmits New line ASCII command via UART2
+//        XmitUART2('\r',1);        // Xmits Carriage Return ASCII command via UART2
+//        
+//        
+////        signed int d;
+////        char str[10];
+////        d =-58;                       
+////        sprintf(str, "%1.0d", d);     // translates -15.5678 into array of char called str[]    
+////        Disp2String(str);             //Display str[]
+////        XmitUART2('\n',1);            // Xmits New line ASCII command via UART2
+////        XmitUART2('\r',1);            // Xmits Carriage Return ASCII command via UART2
+//        
+//        
+//        LATBbits.LATB8 = 1;             //Turn on LED
+////        Idle();                       // Put MCU in idle mode - OPTIONAL
+//        
+//    }
+//    
+//    return;
+//}
