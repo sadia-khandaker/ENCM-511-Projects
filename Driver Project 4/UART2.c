@@ -66,6 +66,7 @@ void InitUART2(void) {
     U2STAbits.URXDA = 0;	//Bit0 *Read Only Bit*
      */
 
+    /*
     //Configure Interrupts (for Tx)
     IFS1bits.U2TXIF = 0; // Clear the Transmit Interrupt Flag
     IPC7bits.U2TXIP = 3; // UART2 TX interrupt has interrupt priority 3-4th highest priority
@@ -75,7 +76,8 @@ void InitUART2(void) {
     IFS1bits.U2RXIF = 0; // Clear the Recieve Interrupt Flag
     IPC7bits.U2RXIP = 4; //UART2 Rx interrupt has 2nd highest priority
     IEC1bits.U2RXIE = 1; // Enable Recieve Interrupts
-
+     */
+    
     U2MODEbits.UARTEN = 1; // And turn the peripheral on
 
     U2STAbits.UTXEN = 1;
@@ -90,7 +92,7 @@ void InitUART2(void) {
 ////  32kHz clock - Baud=300 ; 500kHz clock - Baud=4800; 8MHz clock - Baud=9600 
 
 void XmitUART2(char CharNum, unsigned int repeatNo) {
-    InitUART2(); //Initialize UART2 module at start of main()
+    //InitUART2(); //Initialize UART2 module at start of main()
 
     while (repeatNo != 0) {
         while (U2STAbits.UTXBF == 1) //Just loop here till the FIFO buffers have room for one more entry

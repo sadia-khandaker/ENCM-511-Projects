@@ -127,10 +127,12 @@ uint8_t CNflag = 0;
 uint16_t i = 0;
 
 void main(void) {
+    //NewClk(8);
     IOinit(); // Initialize IOs for low-power wake-up
     InitUART2(); // Initialize UART settings and enable UART module
+    IOcheck();
     while (1) {
-        IOcheck(); // Check if any IOs are active
+         // Check if any IOs are active
         Idle(); // Put MCU in idle mode
     }
 }

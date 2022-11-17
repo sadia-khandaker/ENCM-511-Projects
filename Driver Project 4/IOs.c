@@ -7,6 +7,8 @@
 
 
 
+
+
 // IOinit() without interrupts
 /*
 void IOinit(void)
@@ -165,27 +167,27 @@ void IOcheck(void) {
     // While PB1 is pressed, LED blinks 0.5 seconds on and 0.5 seconds off. The message "PB1 is pressed" is displayed on the PC terminal.
     while ((PORTAbits.RA4 == 0) && (PORTBbits.RB4 == 1) && (PORTAbits.RA2 == 1)) //While only RA4 pb is pressed
     {
+        Disp2String("PB1 is pressed\r\n"); // Display message on PC terminal 
         delay_ms(500, 1); // 0.5 seconds on and 0.5 seconds off
         LATBbits.LATB8 = LATBbits.LATB8 ^ 1; // Turns on LED connected to port RB8
-        Disp2String("PB1 is pressed\r\n"); // Display message on PC terminal
+        
     }
 
     // While PB2 is pressed, LED blinks 2 seconds on and 2 seconds off. The message "PB2 is pressed" is displayed on the PC terminal.
     while ((PORTBbits.RB4 == 0) && (PORTAbits.RA4 == 1) && (PORTAbits.RA2 == 1)) //While only RB4 pb is pressed
     {
-        delay_ms(2000, 1); // 2 seconds on and 2 seconds off
-        LATBbits.LATB8 = LATBbits.LATB8 ^ 1; // Turns on LED connected to port RB8
-
         Disp2String("PB2 is pressed\r\n"); // Display message on PC terminal
+        LATBbits.LATB8 = LATBbits.LATB8 ^ 1; // Turns on LED connected to port RB8
+        delay_ms(2000, 1); // 2 seconds on and 2 seconds off
+        
     }
 
     // While PB3 is pressed, LED blinks 3 seconds on and 3 seconds off. The message "PB3 is pressed" is displayed on the PC terminal.
     while ((PORTAbits.RA2 == 0) && (PORTAbits.RA4 == 1) && (PORTBbits.RB4 == 1)) //While only RA2 pb is pressed
     {
+        Disp2String("PB3 is pressed\r\n"); // Display message on PC terminal
         delay_ms(3000, 1); // 3 seconds on and 3 seconds off
         LATBbits.LATB8 = LATBbits.LATB8 ^ 1; // Turns on LED connected to port RB8
-
-        Disp2String("PB3 is pressed\r\n"); // Display message on PC terminal
     }
 
     // While 2 or more pbs are pressed, LED is on with no blinking. The message "PB___ and PB___ are pressed" is displayed on the PC terminal.
@@ -195,7 +197,7 @@ void IOcheck(void) {
         if ((PORTAbits.RA2 == 0) && (PORTAbits.RA4 == 0) && (PORTBbits.RB4 == 1)) // RA2 and RA4 pressed
         {
 
-            Disp2String("PB3 and PB1 are pressed\r\n"); // Display message on PC terminal
+            Disp2String("PB1 and PB3 are pressed\r\n"); // Display message on PC terminal
         } else if ((PORTAbits.RA2 == 0) && (PORTAbits.RA4 == 1) && (PORTBbits.RB4 == 0)) // RA2 and RB4 pressed
         {
 
@@ -204,6 +206,10 @@ void IOcheck(void) {
         {
 
             Disp2String("PB1 and PB2 are pressed\r\n"); // Display message on PC terminal
+        } else if ((PORTAbits.RA2 == 0) && (PORTAbits.RA4 == 0) && (PORTBbits.RB4 == 0)) // RA4 and RB4 pressed
+        {
+
+            Disp2String("All PBs are pressed\r\n"); // Display message on PC terminal
         }
     }
 
@@ -213,7 +219,6 @@ void IOcheck(void) {
         LATBbits.LATB8 = 0;
         Disp2String("No buttons are pressed\r\n"); // Display message on PC terminal
     }
-
 }
 
 
@@ -252,6 +257,6 @@ void __attribute__((interrupt, no_auto_psv)) _CNInterrupt(void) {
     CNflag = 1; // global user defined flag - use only if needed
     IFS1bits.CNIF = 0; // clear IF flag
     Nop();
-
+    IOcheck();
     return;
 }

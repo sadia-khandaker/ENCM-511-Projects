@@ -14,11 +14,12 @@
 // PROVIDED CODE FROM DR. VYAS
 
 void delay_ms(uint16_t time_ms, uint8_t idle_on) {
-    NewClk(8);
+    //NewClk(8);
     //T2CON config
     T2CONbits.TSIDL = 0; //operate in idle mode
     T2CONbits.T32 = 0; // operate timer 2 as 16 bit timer
     T2CONbits.TCS = 0; // use internal clock
+    T2CONbits.TCKPS = 0b11;
     // T2CONbits.TGATE = 0;
 
 
@@ -27,7 +28,7 @@ void delay_ms(uint16_t time_ms, uint8_t idle_on) {
     IEC0bits.T2IE = 1; //enable timer interrupt
     IFS0bits.T2IF = 0; // Clear timer 2 flaf
 
-    PR2 = time_ms << 4; //After PR2 simplification
+    PR2 = time_ms * 16; //* 4000 / (256); //After PR2 simplification
     TMR2 = 0;
     T2CONbits.TON = 1; //start timer
 
@@ -35,7 +36,7 @@ void delay_ms(uint16_t time_ms, uint8_t idle_on) {
         Idle();
     }
     T2CONbits.TON = 0; // Stop timer
-    NewClk(32);
+    //NewClk(8);
     return;
 }
 
