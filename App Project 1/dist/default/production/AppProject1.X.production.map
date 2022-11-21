@@ -1,0 +1,154 @@
+Microchip Technology Inc, v2.00 (B)
+
+Tool Name:
+  /Applications/microchip/xc16/v2.00/bin/bin/../bin/elf-ld
+
+Command:
+  -p24F16KA101 \
+  --mdfp=/Applications/microchip/mplabx/v6.00/packs/Microchip/PIC24F-KA-KL-KM_DFP/1.4.83/xc16 \
+  -o \
+  dist/default/production/AppProject1.X.production.elf \
+  -L/Applications/microchip/xc16/v2.00/bin/bin/.. \
+  -L/Applications/microchip/mplabx/v6.00/packs/Microchip/PIC24F-KA-KL-KM_DFP/1.4.83/xc16/bin/../support/PIC24F/gld \
+  -L/Applications/microchip/xc16/v2.00/bin/bin/../../lib \
+  -L/Applications/microchip/xc16/v2.00/bin/bin/../../support/PIC24E/gld \
+  -L/Applications/microchip/xc16/v2.00/bin/bin/../../support/PIC24F/gld \
+  -L/Applications/microchip/xc16/v2.00/bin/bin/../../support/PIC24H/gld \
+  -L/Applications/microchip/xc16/v2.00/bin/bin/../../support/dsPIC30F/gld \
+  -L/Applications/microchip/xc16/v2.00/bin/bin/../../support/dsPIC33C/gld \
+  -L/Applications/microchip/xc16/v2.00/bin/bin/../../support/dsPIC33E/gld \
+  -L/Applications/microchip/xc16/v2.00/bin/bin/../../support/dsPIC33F/gld \
+  build/default/production/main.o \
+  build/default/production/ChangeClk.o \
+  build/default/production/IOs.o \
+  build/default/production/UART2.o \
+  build/default/production/TimeDelay.o \
+  --defsym=__MPLAB_BUILD=1 \
+  -Tp24F16KA101.gld.00 \
+  --stack=16 \
+  --check-sections \
+  --data-init \
+  --pack-data \
+  --handles \
+  --isr \
+  --no-gc-sections \
+  --fill-upper=0 \
+  --stackguard=16 \
+  --no-force-link \
+  --smart-io \
+  -Map=dist/default/production/AppProject1.X.production.map \
+  --report-mem \
+  --memorysummary \
+  dist/default/production/memoryfile.xml \
+  -start-group \
+  --library=c99-pic30-elf \
+  --library=m-elf \
+  --library=c99-elf \
+  -end-group \
+
+
+Optional library libpPIC24Fxxx.a not found
+Archive member included because of file (symbol)
+
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(crt0_standard.o)
+                              (__resetPRI)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(data_init_standard.o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(crt0_standard.o) (__data_init_standard)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(crt_start_mode_normal.Meo)
+                              (__crt_start_mode_normal)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(fixunssfsi.XX_o)
+                              build/default/production/UART2.o (___fixunssfsi)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(floatsisf.XX_o)
+                              build/default/production/UART2.o (___floatsisf)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(floatunsisf.XX_o)
+                              build/default/production/UART2.o (___floatunsisf)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(funpack.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(fixunssfsi.XX_o) (__funpack)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(divsf3x.XX_o)
+                              build/default/production/UART2.o (___divsf3)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(typefx.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(divsf3x.XX_o) (__typef)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(spackfx.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(divsf3x.XX_o) (__spackf)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(unpackfx.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(divsf3x.XX_o) (__unpackf)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(errno.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(divsf3x.XX_o) (_errno)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(floatdisf.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(floatsisf.XX_o) (___floatdisf)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(floatundisf.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(floatunsisf.XX_o) (___floatundisf)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(fpack.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(floatundisf.XX_o) (__fpack)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libm-elf.a(powf.XX_o)
+                              build/default/production/UART2.o (_powf)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libm-elf.a(fabsf.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libm-elf.a(powf.XX_o) (_fabsf)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libm-elf.a(scalbnf.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libm-elf.a(powf.XX_o) (_scalbnf)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libm-elf.a(sqrtf.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libm-elf.a(powf.XX_o) (_sqrtf)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(strlen.XX_o)
+                              build/default/production/UART2.o (_strlen)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(__errno_location.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libm-elf.a(powf.XX_o) (___errno_val)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(__sio_sprintf_doux.XX_o)
+                              build/default/production/IOs.o (__sprintf_cdnopuxX)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(__fmt_d.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(__sio_sprintf_doux.XX_o) (___fmt_d_needed)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(__fmt_o.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(__sio_sprintf_doux.XX_o) (___fmt_o_needed)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(__fmt_s.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(__sio_sprintf_doux.XX_o) (___fmt_s_needed)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(__fmt_u.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(__fmt_d.XX_o) (___cvt_u)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(__fmt_x.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(__sio_sprintf_doux.XX_o) (___fmt_x_needed)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(__int_vsprintf.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(__sio_sprintf_doux.XX_o) (___vsprintf)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(__printf_core.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(__fmt_d.XX_o) (___pad)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(memcpy.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(__printf_core.XX_o) (_memcpy)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(memset.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(__printf_core.XX_o) (_memset)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(__int_vsnprintf.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(__int_vsprintf.XX_o) (___vsnprintf)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(__int_vfprintf.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(__int_vsnprintf.XX_o) (___vfprintf)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(atoi.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(__printf_core.XX_o) (_atoi)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(tolower.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(__printf_core.XX_o) (_tolower)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(toupper.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(__fmt_x.XX_o) (_toupper)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(__pop_float.XX_lo)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(__printf_core.XX_o) (___pop_float)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(__pop_int.XX_lo)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(__printf_core.XX_o) (___pop_int)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(__pop_ptr.XX_lo)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(__printf_core.XX_o) (___pop_ptr)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(extendsfdf.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(__pop_float.XX_lo) (___extendsfdf2)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(feqltle.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libm-elf.a(powf.XX_o) (___lesf2)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(fgtge.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libm-elf.a(powf.XX_o) (___gtsf2)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(mulsi3.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(memset.XX_o) (___mulsi3)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(addsf3x.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libm-elf.a(powf.XX_o) (___subsf3)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(mulsf3x.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libm-elf.a(powf.XX_o) (___mulsf3)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(dnrmpackfx.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(addsf3x.XX_o) (__dnrmpackf)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(unpackdnrmfx.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(mulsf3x.XX_o) (__unpackdnrmf)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(propnanfx.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(addsf3x.XX_o) (__propnanf)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(fcompare.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(feqltle.XX_o) (__fcompare)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(funpack2.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(fcompare.XX_o) (__funpack2)
+/Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-pic30-elf.a(divmoddi3.XX_o)
+                              /Applications/microchip/xc16/v2.00/bin/bin/../../lib/libc99-elf.a(__fmt_u.XX_o) (___udivdi3)

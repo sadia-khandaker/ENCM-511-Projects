@@ -125,17 +125,15 @@
 #pragma config DSWDTOSC = LPRC // DeepSleep WDT uses Lo Power RC clk
 #pragma config DSWDTPS = DSWDTPS7 // DSWDT postscaler set to 32768 
 
-
 // MACROS for Idle, Sleep modes
 #define Nop() {__asm__ volatile ("nop");}
 #define ClrWdt() {__asm__ volatile ("clrwdt");}
 #define Sleep() {__asm__ volatile ("pwrsav #0");}   //Sleep() - put MCU in sleep mode - CPU and some peripherals off
 #define Idle() {__asm__ volatile ("pwrsav #1");}    //Idle() - put MCU in idle mode - only CPU off
 #define dsen() {__asm__ volatile ("BSET DSCON, #15");} //
-
 // Global variables
-uint8_t CNflag = 0;
-uint16_t i = 0;
+//uint8_t CNflag = 0;
+//uint16_t i = 0;
 
 void main(void) {
     NewClk(32);
@@ -146,6 +144,9 @@ void main(void) {
          // Check if any IOs are active
         Idle(); // Put MCU in idle mode
     }
+    
+    return;
+  
 }
 
 

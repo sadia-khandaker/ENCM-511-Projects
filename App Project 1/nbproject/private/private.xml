@@ -5,11 +5,10 @@
         <group>
             <file>file:/Users/sadiakhandaker/MPLABXProjects/ENCM511/AppProject1.X/TimeDelay.h</file>
             <file>file:/Users/sadiakhandaker/MPLABXProjects/ENCM511/AppProject1.X/main.c</file>
-            <file>file:/Users/sadiakhandaker/MPLABXProjects/ENCM511/AppProject1.X/ChangeClk.c</file>
+            <file>file:/Users/sadiakhandaker/MPLABXProjects/ENCM511/AppProject1.X/IOs.h</file>
             <file>file:/Users/sadiakhandaker/MPLABXProjects/ENCM511/AppProject1.X/UART2.c</file>
             <file>file:/Users/sadiakhandaker/MPLABXProjects/ENCM511/AppProject1.X/IOs.c</file>
             <file>file:/Users/sadiakhandaker/MPLABXProjects/ENCM511/AppProject1.X/UART2.h</file>
-            <file>file:/Users/sadiakhandaker/MPLABXProjects/ENCM511/AppProject1.X/disassembly/listing.disasm</file>
             <file>file:/Users/sadiakhandaker/MPLABXProjects/ENCM511/AppProject1.X/TimeDelay.c</file>
             <file>file:/Users/sadiakhandaker/MPLABXProjects/ENCM511/AppProject1.X/ChangeClk.h</file>
         </group>

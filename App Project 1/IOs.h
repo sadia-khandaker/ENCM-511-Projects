@@ -18,13 +18,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-
-
-
 #endif	/* XC_HEADER_TEMPLATE_H */
 
-extern uint8_t CNflag; 
 extern int min;
 extern int sec;
+uint16_t flag;
 void IOinit(void);
+void format_time(void);
 void IOcheck(void);
