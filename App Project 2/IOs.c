@@ -11,6 +11,7 @@
 #include "TimeDelay.h"
 #include "IOs.h"
 #include "UART2.h"
+#include "ADC.h"
 
 
 
@@ -55,78 +56,78 @@ void IOinit(void)
 
 // CN interrupt routine = Used in Driver project 4
 
-void IOcheck(void)
-{
-    IEC1bits.CNIE = 0; //disable CN interrupts to avoid debounces
-    delay_ms(400,1);   // 400 msec delay to filter out debounces 
-    IEC1bits.CNIE = 1; //Enable CN interrupts to detect pb release
-    
-    while((PORTAbits.RA4 == 0) && (PORTBbits.RB4 == 1) && (PORTAbits.RA2 == 1)) //While only RA4 pb is pressed
-       {
-        delay_ms(500,1);   // 1 sec delay
-        LATBbits.LATB8 = LATBbits.LATB8 ^ 1; 
-        NewClk(8); // speed up clock just for display
-        Disp2String("\r RA4 is pressed       ");
-        NewClk(32); // slow down clock for delay and other tasks
-       }
-    
-    while((PORTBbits.RB4 == 0) && (PORTAbits.RA4 == 1) &&  (PORTAbits.RA2 == 1)) //While only RB4 pb is pressed
-    {
-        delay_ms(2000,1);   // 1 sec delay
-        LATBbits.LATB8 = LATBbits.LATB8 ^ 1; 
-        NewClk(8);
-        Disp2String("\r RB4 is pressed       ");
-        NewClk(32);
-    }
-    while((PORTAbits.RA2 == 0) && (PORTAbits.RA4 == 1) && (PORTBbits.RB4 == 1)) //While only RA2 pb is pressed
-    {
-        delay_ms(3000,1);   // 1 sec delay
-        LATBbits.LATB8 = LATBbits.LATB8 ^ 1; // Turns on LED connected to port RB8
-        NewClk(8);
-        Disp2String("\r RA2 is pressed       ");
-        NewClk(32);
-    }
-    while((PORTAbits.RA2 == 0) && (PORTAbits.RA4 == 0) && (PORTBbits.RB4 == 1)) //While RA2 and RA4 pb is pressed
-    {
-        LATBbits.LATB8 = 1; // Turns on LED connected to port RB8
-        NewClk(8);
-        Disp2String("\r RA2 & RA4 are pressed    ");
-        NewClk(32);
-    }
-    while((PORTAbits.RA2 == 0) && (PORTAbits.RA4 == 1) && (PORTBbits.RB4 == 0)) //While RA2 and RB4 pb is pressed
-    {
-        LATBbits.LATB8 = 1; // Turns on LED connected to port RB8
-        NewClk(8);
-        Disp2String("\r RA2 & RB4 are pressed    ");
-        NewClk(32);
-    }
-    while((PORTAbits.RA2 == 1) && (PORTAbits.RA4 == 0) && (PORTBbits.RB4 == 0)) //While only RB4 and RA4 pb is pressed
-    {
-        LATBbits.LATB8 = 1; // Turns on LED connected to port RB8
-        NewClk(8);
-        Disp2String("\r RA4 & RB4 are pressed    ");
-        NewClk(32);
-    }
-    while((PORTAbits.RA2 == 0) && (PORTAbits.RA4 == 0) && (PORTBbits.RB4 == 0)) //While all pb is pressed
-    {
-        LATBbits.LATB8 = 1; // Turns on LED connected to port RB8
-        NewClk(8);
-        Disp2String("\r All are pressed         ");
-        NewClk(32);
-    }
-    if((PORTAbits.RA2 == 1) && (PORTAbits.RA4 == 1) && (PORTBbits.RB4 == 1)) //No pbs are pressed
-    {
-        LATBbits.LATB8 = 0; // Turns on LED connected to port RB8
-        NewClk(8);
-        Disp2String("\r Nothing pressed      ");
-        NewClk(32);
-        T2CONbits.TON = 0; // Disable timer
-        IEC0bits.T2IE = 0; //Disable timer interrupt
-    }
-    
-    return;
-
-}
+//void IOcheck(void)
+//{
+//    IEC1bits.CNIE = 0; //disable CN interrupts to avoid debounces
+//    delay_ms(400,);   // 400 msec delay to filter out debounces 
+//    IEC1bits.CNIE = 1; //Enable CN interrupts to detect pb release
+//    
+//    while((PORTAbits.RA4 == 0) && (PORTBbits.RB4 == 1) && (PORTAbits.RA2 == 1)) //While only RA4 pb is pressed
+//       {
+//        delay_ms(500,1);   // 1 sec delay
+//        LATBbits.LATB8 = LATBbits.LATB8 ^ 1; 
+//        NewClk(8); // speed up clock just for display
+//        Disp2String("\r RA4 is pressed       ");
+//        NewClk(32); // slow down clock for delay and other tasks
+//       }
+//    
+//    while((PORTBbits.RB4 == 0) && (PORTAbits.RA4 == 1) &&  (PORTAbits.RA2 == 1)) //While only RB4 pb is pressed
+//    {
+//        delay_ms(2000,1);   // 1 sec delay
+//        LATBbits.LATB8 = LATBbits.LATB8 ^ 1; 
+//        NewClk(8);
+//        Disp2String("\r RB4 is pressed       ");
+//        NewClk(32);
+//    }
+//    while((PORTAbits.RA2 == 0) && (PORTAbits.RA4 == 1) && (PORTBbits.RB4 == 1)) //While only RA2 pb is pressed
+//    {
+//        delay_ms(3000,1);   // 1 sec delay
+//        LATBbits.LATB8 = LATBbits.LATB8 ^ 1; // Turns on LED connected to port RB8
+//        NewClk(8);
+//        Disp2String("\r RA2 is pressed       ");
+//        NewClk(32);
+//    }
+//    while((PORTAbits.RA2 == 0) && (PORTAbits.RA4 == 0) && (PORTBbits.RB4 == 1)) //While RA2 and RA4 pb is pressed
+//    {
+//        LATBbits.LATB8 = 1; // Turns on LED connected to port RB8
+//        NewClk(8);
+//        Disp2String("\r RA2 & RA4 are pressed    ");
+//        NewClk(32);
+//    }
+//    while((PORTAbits.RA2 == 0) && (PORTAbits.RA4 == 1) && (PORTBbits.RB4 == 0)) //While RA2 and RB4 pb is pressed
+//    {
+//        LATBbits.LATB8 = 1; // Turns on LED connected to port RB8
+//        NewClk(8);
+//        Disp2String("\r RA2 & RB4 are pressed    ");
+//        NewClk(32);
+//    }
+//    while((PORTAbits.RA2 == 1) && (PORTAbits.RA4 == 0) && (PORTBbits.RB4 == 0)) //While only RB4 and RA4 pb is pressed
+//    {
+//        LATBbits.LATB8 = 1; // Turns on LED connected to port RB8
+//        NewClk(8);
+//        Disp2String("\r RA4 & RB4 are pressed    ");
+//        NewClk(32);
+//    }
+//    while((PORTAbits.RA2 == 0) && (PORTAbits.RA4 == 0) && (PORTBbits.RB4 == 0)) //While all pb is pressed
+//    {
+//        LATBbits.LATB8 = 1; // Turns on LED connected to port RB8
+//        NewClk(8);
+//        Disp2String("\r All are pressed         ");
+//        NewClk(32);
+//    }
+//    if((PORTAbits.RA2 == 1) && (PORTAbits.RA4 == 1) && (PORTBbits.RB4 == 1)) //No pbs are pressed
+//    {
+//        LATBbits.LATB8 = 0; // Turns on LED connected to port RB8
+//        NewClk(8);
+//        Disp2String("\r Nothing pressed      ");
+//        NewClk(32);
+//        T2CONbits.TON = 0; // Disable timer
+//        IEC0bits.T2IE = 0; //Disable timer interrupt
+//    }
+//    
+//    return;
+//
+//}
 
 uint8_t pb_flag = 0; // Flag to indicate that a push button has been pressed
 
@@ -186,11 +187,11 @@ void toggle_LEDs(void) {
  */
 void generate_sequence(int round, uint8_t *round_array) {
     int i;
-    srand(0x3300)
-    uint8_t bit;
+    srand(0x3300);
+//    uint8_t bit;
     for (i = 0; i < round; i++) {
-        bit = rand() % 2;
-        round_array[i] = bit;
+//        bit = rand() % 2;
+        round_array[i] = rand() % 2;
     }
     return;
 }
@@ -321,60 +322,6 @@ uint8_t pb3_pressed() {
 }
 
 
-/**
- * Record the sequence of which the user presses the buttons, checks if the sequence is correct
- * @param round_array  array of different number of elements that hold the the bits for the LED lights
- * @param size size of the round_array
- */
-void record_sequence(uint8_t *round_array, int size) {
-    int i;
-    int pressed = 0;
-    // hold temp array to compare with round_array
-    uint8_t temp_array[size];
-    while (pressed < size && game_started == 1) {
-        if (temp_array[ pressed ] != round_array[ pressed ]) {
-            game_started = 0;
-        }
-
-        if (pb1_pressed()) {
-            // store 1 in temp_array
-            temp_array[ pressed ] = 1;
-            // check
-
-            pressed++;
-            // wait for pb1 to be released
-            while (pb1_pressed()) {
-                // do nothing
-            }
-        }
-        // check if pb2 has been pressed
-        if (pb2_pressed()) {
-
-            // store 0 in temp_array
-            temp_array[ pressed ] = 1;
-            // increment pressed
-            pressed++;
-            // wait for pb2 to be released
-            while (pb2_pressed()) {
-
-            }
-        }
-        if (pb3_pressed()) {
-
-            // store 0 in temp_array
-            temp_array[ pressed ] = 0;
-            // increment pressed
-            pressed++;
-            // wait for pb2 to be released
-            while (pb3_pressed()) {
-
-            }
-        }
-
-    }
-
-
-}
 
 
 
@@ -490,15 +437,72 @@ void play_game(){
     }
 
     // Game over
-    char score[10];
-    Disp2String("\r Game Over! \r Your score is: ");
-    sprintf(score, "%d", round);
-    Disp2String(score);
-    Disp2String("\r");
-    // reset the game
+//    char score[10];
+//    Disp2String("\r Game Over! \r Your score is: ");
+//    sprintf(score, "%d", round);
+//    Disp2String(score);
+//    Disp2String("\r");
+//    // reset the game
     game_started = 0;
     round = 1;
 }
+
+
+/**
+ * Record the sequence of which the user presses the buttons, checks if the sequence is correct
+ * @param round_array  array of different number of elements that hold the the bits for the LED lights
+ * @param size size of the round_array
+ */
+void record_sequence(uint8_t *round_array, int size) {
+    int i;
+    int pressed = 0;
+    // hold temp array to compare with round_array
+    uint8_t temp_array[size];
+    while (pressed < size && game_started == 1) {
+        if (temp_array[ pressed ] != round_array[ pressed ]) {
+            game_started = 0;
+        }
+
+        if (pb1_pressed()) {
+            // store 1 in temp_array
+            temp_array[ pressed ] = 1;
+            // check
+
+            pressed++;
+            // wait for pb1 to be released
+            while (pb1_pressed()) {
+                // do nothing
+            }
+        }
+        // check if pb2 has been pressed
+        if (pb2_pressed()) {
+
+            // store 0 in temp_array
+            temp_array[ pressed ] = 1;
+            // increment pressed
+            pressed++;
+            // wait for pb2 to be released
+            while (pb2_pressed()) {
+
+            }
+        }
+        if (pb3_pressed()) {
+
+            // store 0 in temp_array
+            temp_array[ pressed ] = 0;
+            // increment pressed
+            pressed++;
+            // wait for pb2 to be released
+            while (pb3_pressed()) {
+
+            }
+        }
+
+    }
+
+
+}
+
 
 
 void play(void) {
