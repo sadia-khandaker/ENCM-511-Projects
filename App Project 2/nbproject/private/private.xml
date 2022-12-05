@@ -6,13 +6,14 @@
             <file>file:/Users/sadiakhandaker/MPLABXProjects/ENCM511/AppProject2.X/UART2.c</file>
             <file>file:/Users/sadiakhandaker/MPLABXProjects/ENCM511/AppProject2.X/main.c</file>
             <file>file:/Users/sadiakhandaker/MPLABXProjects/ENCM511/AppProject2.X/TimeDelay.c</file>
+            <file>file:/Users/sadiakhandaker/MPLABXProjects/ENCM511/AppProject2.X/LED.c</file>
             <file>file:/Users/sadiakhandaker/MPLABXProjects/ENCM511/AppProject2.X/ADC.h</file>
             <file>file:/Users/sadiakhandaker/MPLABXProjects/ENCM511/AppProject2.X/TimeDelay.h</file>
             <file>file:/Users/sadiakhandaker/MPLABXProjects/ENCM511/AppProject2.X/IOs.c</file>
-            <file>file:/Users/sadiakhandaker/MPLABXProjects/ENCM511/AppProject2.X/ChangeClk.c</file>
             <file>file:/Users/sadiakhandaker/MPLABXProjects/ENCM511/AppProject2.X/ADC.c</file>
-            <file>file:/Users/sadiakhandaker/MPLABXProjects/ENCM511/AppProject2.X/ChangeClk.h</file>
-            <file>file:/Users/sadiakhandaker/MPLABXProjects/ENCM511/AppProject2.X/UART2.h</file>
+            <file>file:/Users/sadiakhandaker/MPLABXProjects/ENCM511/AppProject2.X/ChangeClk.c</file>
+            <file>file:/Users/sadiakhandaker/MPLABXProjects/ENCM511/AppProject2.X/LED.h</file>
+            <file>file:/Users/sadiakhandaker/MPLABXProjects/ENCM511/AppProject2.X/IOs.h</file>
         </group>
     </open-files>
 </project-private>

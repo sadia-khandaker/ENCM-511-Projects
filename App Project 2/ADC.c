@@ -8,6 +8,9 @@
 
 #include <xc.h>
 #include "UART2.h"
+#include "ADC.h"
+#include "ChangeClk.h"
+
 
 uint16_t do_ADC(void) {
     uint16_t ADCvalue;
@@ -40,3 +43,41 @@ uint16_t do_ADC(void) {
     AD1CON1bits.ADON = 0;
     return (ADCvalue);
 }
+
+// Does ADC on AN5 and dislays ADCBUF0 value and proportional number of markers on Terminal
+void DispADC(void)
+{
+        NewClk(8);
+        uint16_t adcbuf; // variable to store ADCBUF0 value
+        uint8_t MarkerCnt; // Stores number of markers needed
+        uint8_t MarkerCntOld; 
+        
+        adcbuf = do_ADC(); // Does ADC conversion on AN5/IO8
+        MarkerCnt = adcbuf/20 + 1; //Calculates number of markers
+        
+        if (MarkerCntOld != MarkerCnt) // refresh display only if ADC value has changed
+        {
+            XmitUART2('\r', 1);
+            XmitUART2(' ', MarkerCntOld + 15); // Clears line
+            XmitUART2('\r', 1);
+            XmitUART2('*', MarkerCnt); //Displays * MarkerCnt times
+            XmitUART2(' ', 1);
+            Disp2Hex(adcbuf); // Displays ADCBUF0 value at end of markers
+            MarkerCntOld = MarkerCnt;
+        }
+         
+        NewClk(32);
+        
+    
+    return;
+}
+
+
+void __attribute__((interrupt, no_auto_psv)) _ADC1Interrupt(void)
+{
+
+    IFS0bits.AD1IF = 0;			// Clear the ADC1 Interrupt Flag
+
+}
+
+

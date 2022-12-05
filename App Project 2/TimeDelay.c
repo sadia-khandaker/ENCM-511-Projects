@@ -20,6 +20,10 @@ void delay_ms(uint16_t time_ms) {
     Idle(); // enter idle mode
 }
 
+
+
+
+
 void __attribute__((interrupt, no_auto_psv)) _T2Interrupt(void) {
     IFS0bits.T2IF=0; //Clear timer 2 interrupt flag
     T2CONbits.TON=0; //Turn off timer 2

@@ -7,7 +7,6 @@
       <itemPath>ChangeClk.h</itemPath>
       <itemPath>ADC.h</itemPath>
       <itemPath>UART2.h</itemPath>
-      <itemPath>IOs.h</itemPath>
       <itemPath>TimeDelay.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
